@@ -80,3 +80,41 @@ resetBtn.onclick = () => {
     count = 0;              
     secondsBlock.innerText = count; 
 };
+
+//characters
+
+const charactersList = document.querySelector('.characters-list');
+const xhr = new XMLHttpRequest ();
+xhr.open ('GET','../data/characters.json');
+xhr.setRequestHeader ("Content-type", "application/json");
+xhr.send();
+xhr.onload = () => {
+    const data = JSON.parse(xhr.response);
+    console.log(data);
+    data.forEach((character) =>{
+        const card = document.createElement('div')
+        card.innerHTML = `
+        <div class ="character-photo">
+        <img src="${character.photo}" alt="${character.name}">
+        </div>
+        <h2>${character.name}</h2>
+        <span>${character.age}</span>
+        `
+        card.classList.add('character-card')
+        charactersList.append(card)
+    
+    });
+}
+
+//any 
+const xhrJson = new XMLHttpRequest();
+xhrJson.open ('GET', '../data/any.json');
+xhrJson.setRequestHeader ("Content-type", "application/json");
+xhrJson.send();
+xhrJson.onload = () => {
+    const data = JSON.parse (xhrJson.response);
+    console.log(data);
+}
+
+
+
