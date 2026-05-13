@@ -62,3 +62,80 @@ const autoTabSlider = () => {
     }, 3000);
 };
 autoTabSlider();
+
+// somInput.oninput = () => {
+//     const xhr = new XMLHttpRequest()
+//     xhr.open('GET', '../data/converter.json')
+//     xhr.setRequestHeader ('Content-type', 'application/json')
+//     xhr.send()
+
+//     xhr.onload = () => {
+//         const data = JSON.parse (xhr.response)
+    
+//         usdInput.value = (somInput.value / data.usd).toFixed(2)
+//     }
+// }
+// usdInput.oninput = () => {
+//     const xhr = new XMLHttpRequest()
+//     xhr.open('GET', '../data/converter.json')
+//     xhr.setRequestHeader ('Content-type', 'application/json')
+//     xhr.send()
+
+//     xhr.onload = () => {
+//         const data = JSON.parse (xhr.response)
+    
+//         somInput.value = (usdInput.value * data.usd).toFixed(2)
+//     }
+// }
+
+
+//CONVERTER
+
+const usdInput = document.querySelector('#usd')
+const somInput = document.querySelector('#som')
+const eurInput = document.querySelector('#eur')
+
+const converter = (element, target) => {
+    element.oninput = () => {
+        const xhr = new XMLHttpRequest()
+        xhr.open('GET', '../data/converter.json')
+        xhr.setRequestHeader ('Content-type', 'application/json')
+        xhr.send()
+        
+        xhr.onload = () => {
+            const data = JSON.parse (xhr.response)
+            if (element.id === 'som') {
+                target.usd.value = (element.value / data.usd).toFixed(2)
+                target.eur.value = (element.value / data.eur).toFixed(2)
+            } 
+            if (element.id === 'usd') {
+                target.som.value = (element.value * data.usd).toFixed(2)
+                target.eur.value = (element.value * data.usd)/data.eur.toFixed(2)
+            }
+            if (element.id === 'eur') {
+                target.som.value = (element.value * data.eur).toFixed(2)
+                target.usd.value = (element.value * data.eur)/data.usd.toFixed(2)
+            }
+            if ( element.value === '') {
+                somInput.value = ''
+                usdInput.value = ''
+                eurInput.value = ''
+            }
+        }
+    }  
+}
+
+converter(somInput, {
+    usd: usdInput,
+    eur: eurInput
+})
+
+converter(usdInput, {
+    som: somInput,
+    eur: eurInput
+})
+
+converter(eurInput, {
+    som: somInput,
+    usd: usdInput
+})
